@@ -34,7 +34,8 @@ if(!$add_ck){$rank{$name}=1;}
 
 }
 
-open (LST,"$i_rank_log") || &error("Can't open $rank_log");
+#open (LST,"$i_rank_log") || &error("Can't open $i_rank_log");
+open (LST,"$i_rank_log") || (LST,"+>$i_rank_log");
 @ico_rank = <LST>;
 close(LST);
 

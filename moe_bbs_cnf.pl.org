@@ -354,7 +354,7 @@ $maxdata = '102400000';
 $rank_log = './moelog/rank.log';
 
 # アイコン使用ランキングファイル
-$irank_log = './moelog/icon_rank.log';
+$i_rank_log = './moelog/icon_rank.log';
 
 # 指定したサイズ以上の画像を貼った場合にサムネイルを表示する
 $samnail = '0';

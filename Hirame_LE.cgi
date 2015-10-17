@@ -808,7 +808,8 @@ sub regist {
 			sleep(1);
 		}
 	}
-	open(RL,"$rank_log") || &error("Can't open $rank_log");
+	#open(RL,"$rank_log") || &error("Can't open $rank_log");
+	open(RL,"$rank_log") || open(RL,"+>$rank_log");
 	if($lockkey == 3){flock(RL,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
 	@rank = <RL>;
 	close(RL);

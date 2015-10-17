@@ -252,7 +252,7 @@ $banner1 = '<!--上部-->';
 $banner2 = '<!--下部-->';
 
 # 過去ログ生成 (0=no 1=yes)
-$pastkey = '1';
+$pastkey = '0';
 
 # 過去ログ用NOファイル
 $nofile = './moelog/pastno.dat';

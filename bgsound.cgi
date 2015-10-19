@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
-# ログファイル読み込み
-$logfile = "./moelog/moemoe.log";
+# 設定ファイル読み込み
+require './moe_bbs_cnf.pl';
 
 if($ENV{'QUERY_STRING'}){
 	($name, $value) = split(/=/,$ENV{'QUERY_STRING'});

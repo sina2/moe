@@ -1,5 +1,8 @@
 #!/usr/bin/perl
 
+#for sysopen()
+use Fcntl;
+
 # 設定ファイル読み込み
 require './moe_bbs_cnf.pl';
 
@@ -7,7 +10,8 @@ if($ENV{'QUERY_STRING'}){
 	($name, $value) = split(/=/,$ENV{'QUERY_STRING'});
 	$bgm = $value;
 }else{
-	open(IN,"$logfile");
+	#open(IN,"$logfile");
+	sysopen(IN,"$logfile",O_RDONLY);
 	@lines = <IN>;
 	close(IN);
 	shift(@lines);
@@ -32,10 +36,11 @@ if($ENV{'QUERY_STRING'}){
 	}
 }
 
+
 if($ENV{'HTTP_USER_AGENT'} =~ /MSIE/){
-	$bgm_ex="<bgsound src=$bgm loop=infinite>";
+	$bgm_ex="<bgsound src=\"$bgm\" loop=infinite>";
 }else{
-	$bgm_ex="<EMBED SRC=$bgm WIDTH=150 HEIGHT=40 AUTOSTART=true REPEAT=true LOOP=true PANEL=0>";
+	$bgm_ex="<EMBED SRC=\"$bgm\" WIDTH=150 HEIGHT=40 AUTOSTART=true REPEAT=true LOOP=true PANEL=0>";
 }
 
 

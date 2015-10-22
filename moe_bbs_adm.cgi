@@ -2,6 +2,9 @@
 
 $Settingfile = './moe_bbs_cnf.pl';
 
+#for sysyopen()
+use Fcntl;
+
 #require "./jcode.pl";
 #use Jcode;
 
@@ -70,7 +73,8 @@ srand(time);
 $crypted = crypt($FORM{'newAdminPass'},int(rand(90))+10);
 
 if (!$FORM{'newAdminPass'}) {$crypted = '';}
-open(LOG,"$Settingfile") || die;
+#open(LOG,"$Settingfile") || die;
+sysopen(LOG,$Settingfile,O_RDONLY) || die;
 @lines = <LOG>;
 close(LOG);
 for ($i=0; $i<=$#lines; $i++) {
@@ -78,7 +82,8 @@ for ($i=0; $i<=$#lines; $i++) {
 }
 $lines[$i] = "\$adminPass = '$crypted';\n";
 
-open(LOG,">$Settingfile") || die;
+#open(LOG,">$Settingfile") || die;
+sysopen(LOG,"$Settingfile",O_WRONLY |O_TRUNC |O_CREAT ) || die;
 print LOG @lines;
 close(LOG);
 
@@ -113,7 +118,8 @@ exit;
 
 sub changeConfig { # 設定の書き換え
 
-open(LOG,"$Settingfile") || die;
+#open(LOG,"$Settingfile") || die;
+sysopen(LOG,$Settingfile,O_RDONLY) || die;
 @lines = <LOG>;
 close(LOG);
 for ($i=0; $i<=$#lines; $i++) {
@@ -145,7 +151,8 @@ for ($i=0; $i<=$#lines; $i++) {
 		$name = '';
 	}
 }
-open(LOG,">$Settingfile") || die;
+#open(LOG,">$Settingfile") || die;
+sysopen(LOG,"$Settingfile", O_WRONLY | O_TRUNC |O_CREAT ) || die;
 print LOG @lines;
 close(LOG);
 
@@ -174,7 +181,8 @@ print qq(
 );
 
 $system = 0;
-open(LOG,"$Settingfile") || die;
+#open(LOG,"$Settingfile") || die;
+sysopen(LOG,$Settingfile,O_RDONLY) || die;
 
 foreach $logline (<LOG>) {
 	if ($logline eq "\n") {next;}

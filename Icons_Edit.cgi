@@ -1,5 +1,8 @@
 #!/usr/bin/perl
 
+#for sysopen()
+use Fcntl;
+
 require './moe_bbs_cnf.pl';
 
 $cgi_lib'maxdata = $ico_max * $ico_rv_num;
@@ -18,7 +21,8 @@ elsif($in{'rank'}){&rank;}
 
 sub rank{
 
-open (LST,"$icofile") || &error("Can't open $icofile");
+#open (LST,"$icofile") || &error("Can't open $icofile");
+sysopen(LST,"$icofile",O_RDONLY) || &error("Can't open $icofile");
 @Icons = <LST>;
 close(LST);
 $num = @Icons ;
@@ -35,11 +39,13 @@ if(!$add_ck){$rank{$name}=1;}
 }
 
 #open (LST,"$i_rank_log") || &error("Can't open $i_rank_log");
-open (LST,"$i_rank_log") || (LST,"+>$i_rank_log");
+sysopen(LST,"$i_rank_log",O_RDONLY | O_REAT) || &error("Can't open $i_rank_log");
 @ico_rank = <LST>;
 close(LST);
 
-open(IN,"$icofile") || &error("Can't open $icofile",'NOLOCK');
+#open(IN,"$icofile") || &error("Can't open $icofile",'NOLOCK');
+sysopen(IN,"$icofile",O_RDONLY) || &error("Can't open $icofile",'NOLOCK');
+
 @icons = <IN>;
 close(IN);
 $i=0;
@@ -149,7 +155,8 @@ sub icon_del{
 
 if(!$del[0]){&error("チェックボックスにチェックがされてません");}
 
-open(AD,"$passfile");
+#open(AD,"$passfile");
+sysopen(AD,"$passfile",O_RDONLY);
 $ad_pass=<AD>;
 close(AD);
 $ad_pass =~ s/\n//;
@@ -163,11 +170,13 @@ if($fll){
 			sleep(1);
 	}
 }
-open (LST,"$icofile") || &error("Can't open $icofile");
+#open (LST,"$icofile") || &error("Can't open $icofile");
+sysopen(LST,"$icofile",O_RDONLY) || &error("Can't open $icofile");
 @Icons = <LST>;
 close(LST);
 
-open(IN,"$rank_log") || &error("Can't open $rank_log");
+#open(IN,"$rank_log") || &error("Can't open $rank_log");
+sysopen(IN,"$rank_log",O_RDONLY) || &error("Can't open $rank_log");
 @rank = <IN>;
 close(IN);
 
@@ -236,9 +245,10 @@ if($in{'rst1_submit'}){&icon_add;}
 if($fll){
 	&fll("$icolock","$icofile",@Icons);
 }else{
-open (LST,">$icofile") || &error("Can't open $icofile");
-print LST @Icons;
-close(LST);
+	#open (LST,">$icofile") || &error("Can't open $icofile");
+	sysopen (LST,"$icofile", O_WRONLY | O_TRUNC | O_CREAT ) || &error("Can't open $icofile");
+	print LST @Icons;
+	close(LST);
 }
 
 if($in{'del_submit'}){
@@ -247,7 +257,8 @@ if($in{'del_submit'}){
 	if( -e "$del_img"){unlink("$del_img");}
 	}
 
-open (LEN,">rw_ck.chk");
+#open (LEN,">rw_ck.chk");
+sysopen (LEN,"rw_ck.chk" , O_WRONLY | O_TRUNC | O_CREAT);
 print LEN ;
 close(LEN);
 
@@ -257,7 +268,8 @@ if($fll){
 		sleep(1);
 	}
 }
-open(RLT,"$i_rank_log") || &error("Can't open $i_rank_log");
+#open(RLT,"$i_rank_log") || &error("Can't open $i_rank_log");
+sysopen(RLT,"$i_rank_log",O_RDONLY) || &error("Can't open $i_rank_log");
 @i_rank = <RLT>;
 close(RLT);
 
@@ -273,9 +285,10 @@ if(!$del_on){push(@new_ir,$ir);}
 if($fll){
 	&fll("$irklock","$i_rank_log",@new_ir);
 }else{
-open(RLT,">$i_rank_log") || &error("Can't open $i_rank_log");
-print RLT @new_ir;
-close(RLT);
+	#open(RLT,">$i_rank_log") || &error("Can't open $i_rank_log");
+	sysopen(RLT,"$i_rank_log", O_WRONLY | O_TRUNC | O_CREAT) || &error("Can't open $i_rank_log");
+	print RLT @new_ir;
+	close(RLT);
 }
 }
 
@@ -285,7 +298,8 @@ close(RLT);
 sub icon_reg{
 &up_icon;
 
-open(AD,"$passfile");
+#open(AD,"$passfile");
+sysopen(AD,"$passfile",O_RDONLY);
 $ad_pass=<AD>;
 close(AD);
 $ad_pass =~ s/\n//;
@@ -302,7 +316,8 @@ if($fll){
 		sleep(1);
 	}
 }
-open (LST,"$icofile") || &error("Can't open $icofile");
+#open (LST,"$icofile") || &error("Can't open $icofile");
+sysopen(LST,"$icofile",O_RDONLY) || &error("Can't open $icofile");
 @Icons = <LST>;
 close(LST);
 
@@ -330,12 +345,14 @@ if(!$reg_off){push(@newline,@new);}
 if($fll){
 	&fll("$icolock","$icofile",@newline);
 }else{
-open (LST,">$icofile") || &error("Can't open $icofile");
-print LST @newline;
-close(LST);
+	#open (LST,">$icofile") || &error("Can't open $icofile");
+	sysopen (LST,"$icofile",O_WRONLY |O_TRUNC |O_CREAT ) || &error("Can't open $icofile");
+	print LST @newline;
+	close(LST);
 }
 
-open (LEN,">rw_ck.chk");
+#open (LEN,">rw_ck.chk");
+sysopen (LEN,"rw_ck.chk",O_WRONLY | O_TRUNC | O_CREAT );
 print LEN $all_len;
 close(LEN);
 
@@ -358,7 +375,8 @@ print"</tr></table>";
 exit;
 }
 
-open(IN,"$rank_log") || &error("Can't open $rank_log");
+#open(IN,"$rank_log") || &error("Can't open $rank_log");
+sysopen(IN,"$rank_log",O_RDONLY) || &error("Can't open $rank_log");
 @rank = <IN>;
 close(IN);
 
@@ -409,11 +427,13 @@ sub edit {
 if(!$in{'name'}){$name_err="お名前";}
 if(!$in{'pwd'}){$pwd_err="削除キー";}
 if($name_err || $pwd_err){&error("$name_err $pwd_err が未記入です");}
-open (LST,"$icofile") || &error("Can't open $icofile");
+#open (LST,"$icofile") || &error("Can't open $icofile");
+sysopen(LST,"$icofile",O_RDONLY) || &error("Can't open $icofile");
 @Icons = <LST>;
 close(LST);
 
-open(IN,"$rank_log") || &error("Can't open $rank_log");
+#open(IN,"$rank_log") || &error("Can't open $rank_log");
+sysopen(IN,"$rank_log",O_RDONLY) || &error("Can't open $rank_log");
 @rank = <IN>;
 close(IN);
 
@@ -489,7 +509,8 @@ print <<"EOM";
  </tr>
 EOM
 
-open(AD,"$passfile");
+#open(AD,"$passfile");
+sysopen(AD,"$passfile",O_RDONLY);
 $ad_pass=<AD>;
 close(AD);
 $ad_pass =~ s/\n//;
@@ -775,10 +796,11 @@ sub up_icon{
 	}
 
 if(!$in{'rst2_submit'}){
-open (LEN,"rw_ck.chk");
-$len_ck = <LEN>;
-close(LEN);
-if ($len_ck == $all_len) { &error("同アイコンの連続追加はできません"); }
+	#open (LEN,"rw_ck.chk");
+	sysopen(LEN,"rw_ck.chk",O_RDONLY);
+	$len_ck = <LEN>;
+	close(LEN);
+	if ($len_ck == $all_len) { &error("同アイコンの連続追加はできません"); }
 }
 	foreach(@reg_num){
 	($ic_nm,$tail,$mac) = split(/<>/,$_);
@@ -794,7 +816,8 @@ if ($len_ck == $all_len) { &error("同アイコンの連続追加はできませ
 		$upfile = substr($upfile,128,$length);
 	}
 
-	open(OUT,"> $ImgFile") || &error("アイコンのアップロードに失敗しました");
+	#open(OUT,"> $ImgFile") || &error("アイコンのアップロードに失敗しました");
+	sysopen(OUT,"$ImgFile",O_WRONLY |O_TRUNC |O_CREAT ) || &error("アイコンのアップロードに失敗しました");
 	binmode(OUT);
 	binmode(STDOUT);
 	print OUT $upfile;
@@ -885,7 +908,8 @@ sub fll{
 	}
 	$tmp_1 = "$$\.tmp";
 
-	open(TMP,">$tmp_1") || &error("TMPファイル書きこみ失敗ヽ(´ー｀)ノ");
+	#open(TMP,">$tmp_1") || &error("TMPファイル書きこみ失敗ヽ(´ー｀)ノ");
+	sysopen(TMP,"$tmp_1", O_WRONLY|O_TRUNC|O_CREAT ) || &error("TMPファイル書きこみ失敗ヽ(´ー｀)ノ");
 	print TMP @_;
 	close(TMP);
 

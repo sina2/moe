@@ -1,5 +1,8 @@
 #!/usr/bin/perl
 
+#for sysopen()
+use Fcntl;
+
 # 設定ファイル読み込み
 require './moe_bbs_cnf.pl';
 
@@ -7,7 +10,7 @@ require './moe_bbs_cnf.pl';
 
 # 過去ログカウントファイルを読み込み
 #open(NUM,"$nofile") || &error("Can't open $nofile");
-open(NUM,"$nofile") || open(NUM,"+>$nofile");
+sysopen(NUM,"$nofile",O_RDONLY | O_CREAT) || &error("Can't open $nofile");
 $count = <NUM>;
 close(NUM);
 
@@ -29,7 +32,8 @@ exit;
 sub do_find {
 	@lines = ();
 	foreach (1 .. $count) {
-		open(DB,"$past_dir\/$_\.html");
+		#open(DB,"$past_dir\/$_\.html");
+		sysopen(DB,"$past_dir\/$_\.html",O_RDONLY);
 		@new_data = <DB>;
 		close(DB);
 

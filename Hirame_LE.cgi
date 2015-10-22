@@ -4,6 +4,9 @@
 #require './jcode.pl';
 use Encode;
 
+# For sysopen()
+use Fcntl;
+
 # しぃじぃあぃぱ〜るぅ〜
 require './cgi-lib.pl';
 # 設定ファイル読み込み
@@ -77,7 +80,8 @@ if($err_on){
 		$err_log="$log_dir$date3\.log";
 		$err_reg = "$date - $ENV{'REMOTE_ADDR'} - $err_on2\r\n";
 		if (-e $err_log){
-			open(ERL,"$err_log") or &error("$err_log オープン失敗ヽ(´ー｀)ノ");
+			#open(ERL,"$err_log") or &error("$err_log オープン失敗ヽ(´ー｀)ノ");
+			sysopen(ERL,"$err_log",O_RDONLY) or &error("$err_log オープン失敗ヽ(´ー｀)ノ");
 			if($flock){flock(ERL,2) or &error("filelock 失敗ヽ(´ー｀)ノ");}
 			@err_log = <ERL>;
 			close(ERL);
@@ -87,7 +91,8 @@ if($err_on){
 		if($fll){
 			&fll("err_log.tmp","$err_log",@err_log);
 		}else{
-			open(ERL,">$err_log") or &error("$err_log オープン失敗ヽ(´ー｀)ノ");
+			#open(ERL,">$err_log") or &error("$err_log オープン失敗ヽ(´ー｀)ノ");
+			sysopen(ERL,"$err_log", O_WRONLY |O_TRUNC | O_CREAT ) or &error("$err_log オープン失敗ヽ(´ー｀)ノ");
 			if($flock){flock(ERL,2) or &error("filelock 失敗ヽ(´ー｀)ノ");}
 			print ERL @err_log;
 			close(ERL);
@@ -171,7 +176,7 @@ EOM
 
 # パスワード確認処理[カ〜ル板の真似]
 #open(DB,"$passfile") || &error("$passfileが無いです");
-open(DB,"$passfile") || open(DB,"+>>$passfile");
+sysopen(DB,"$passfile",O_RDONLY | O_CREAT) || &error("$passfileが無いです");
 @lines = <DB>;
 close(DB);
 $password = shift(@lines);
@@ -210,7 +215,7 @@ if ($in{'vt'}){ &vote;}
 	# アイコン設定ファイル読み込み
 sub icon_exe{
 	#open(IN,"$icofile") || &error("Can't open $icofile",'NOLOCK');
-	open(IN,"$icofile") || open(IN,"+>$icofile");
+	sysopen(IN,"$icofile",O_RDONLY | O_CREAT ) || &error("Can't open $icofile",'NOLOCK');
 	@icons = <IN>;
 	close(IN);
 $Icon_num = @icons;
@@ -256,7 +261,7 @@ sub html_log {
 
 	# ログを読み込み
 	#open(LOG,"$logfile") || &error("Can't open $logfile",'NOLOCK');
-	open(LOG,"$logfile") || open(LOG,"+>$logfile");
+	sysopen(LOG,"$logfile",O_RDONLY | O_CREAT) || &error("Can't open $logfile",'NOLOCK');
 	@lines = <LOG>;
 	close(LOG);
 
@@ -758,7 +763,8 @@ sub regist {
 			sleep(1);
 		}
 	}
-	open(LOG,"$logfile") || &error("Can't open $logfile");
+	#open(LOG,"$logfile") || &error("Can't open $logfile");
+	sysopen(LOG,"$logfile",O_RDONLY) || &error("Can't open $logfile");
 	if($lockkey == 3){flock(LOG,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
 	@lines = <LOG>;
 	close(LOG);
@@ -809,7 +815,7 @@ sub regist {
 		}
 	}
 	#open(RL,"$rank_log") || &error("Can't open $rank_log");
-	open(RL,"$rank_log") || open(RL,"+>$rank_log");
+	sysopen(RL,"$rank_log",O_RDONLY | O_CREAT ) || &error("Can't open $rank_log");
 	if($lockkey == 3){flock(RL,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
 	@rank = <RL>;
 	close(RL);
@@ -970,7 +976,8 @@ sub regist {
 
 			if(!$k){
 				if(-e "$vt_dir$num\.vt"){
-					open(VT,"$vt_dir$num\.vt");
+					#open(VT,"$vt_dir$num\.vt");
+					sysopen(VT,"$vt_dir$num\.vt",O_RDONLY);
 					@past_vt = <VT>;
 					close(VT);
 					unshift(@past_vt,$num);
@@ -1048,7 +1055,8 @@ sub regist {
 		&fll("$rklock","$rank_log",@new_rank);
 	}else{
 
-open(RL, "+< $rank_log") || &error("Can't open $rank_log");
+#open(RL, "+< $rank_log") || &error("Can't open $rank_log");
+sysopen(RL, "$rank_log" ,O_RDWR ) || &error("Can't open $rank_log");
 if($lockkey == 3){flock(RL,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
 truncate(RL, 0);
 seek(RL, 0, 0);
@@ -1070,7 +1078,8 @@ close(RL);
 			sleep(1);
 		}
 	}
-	open(IN,"$i_rank_log") || &error("Can't open $i_rank_log");
+	#open(IN,"$i_rank_log") || &error("Can't open $i_rank_log");
+	sysopen(IN,"$i_rank_log",O_RDONLY) || &error("Can't open $i_rank_log");
 	@i_rank = <IN>;
 	close(IN);
 
@@ -1084,15 +1093,17 @@ close(RL);
 	if($fll){
 		&fll("$irklock","$i_rank_log",@i_rank);
 	}else{
-	open(IN,">$i_rank_log") || &error("Can't open $i_rank_log");
-	print IN @i_rank;
-	close(IN);
+		#open(IN,">$i_rank_log") || &error("Can't open $i_rank_log");
+		sysopen(IN,"$i_rank_log" , O_WRONLY | O_TRUNC | O_CREAT ) || &error("Can't open $i_rank_log");
+		print IN @i_rank;
+		close(IN);
 	}
 
 	}
 
 	if($vote){
-		open(VT,">$vt_dir$oya\.vt") || &error("Can't open $vt_dir$oya\.vt");
+		#open(VT,">$vt_dir$oya\.vt") || &error("Can't open $vt_dir$oya\.vt");
+		sysopen(VT,"$vt_dir$oya\.vt" , O_WRONLY | O_TRUNC | O_CREAT ) || &error("Can't open $vt_dir$oya\.vt");
 		close(VT);
 		chmod(oct($vt_pm),"$vt_dir$oya\.vt");
 	}
@@ -1103,13 +1114,13 @@ close(RL);
 	if($fll){
 		&fll("$lockfile","$logfile",@new);
 	}else{
-
-open(LOG, "+< $logfile") || &error("Can't open $logfile");
-if($lockkey == 3){flock(LOG,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
-truncate(LOG, 0);
-seek(LOG, 0, 0);
-print LOG @new;
-close(LOG);
+		#open(LOG, "+< $logfile") || &error("Can't open $logfile");
+		sysopen(LOG, "$logfile" , O_RDWR ) || &error("Can't open $logfile");
+		if($lockkey == 3){flock(LOG,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
+		truncate(LOG, 0);
+		seek(LOG, 0, 0);
+		print LOG @new;
+		close(LOG);
 
 	}
 
@@ -1153,7 +1164,8 @@ exit;
 ## --- 返信フォーム
 sub res_msg {
 	# ログを読み込み
-	open(LOG,"$logfile") || &error("Can't open $logfile",'NOLOCK');
+	#open(LOG,"$logfile") || &error("Can't open $logfile",'NOLOCK');
+	sysopen(LOG,"$logfile",O_RDONLY) || &error("Can't open $logfile",'NOLOCK');
 	@lines = <LOG>;
 	close(LOG);
 
@@ -1506,7 +1518,8 @@ HTML
 		@pairs = split(/ /,$word);
 
 		# ファイルを読み込み
-		open(LOG,"$logfile") || &error("Can't open $logfile",'NOLOCK');
+		#open(LOG,"$logfile") || &error("Can't open $logfile",'NOLOCK');
+		sysopen(LOG,"$logfile",O_RDONLY) || &error("Can't open $logfile",'NOLOCK');
 		@lines = <LOG>;
 		close(LOG);
 
@@ -1661,7 +1674,8 @@ sub msg_del {
 		&error("パスワードが違います",'NOLOCK');
 	}
 
-	open(LOG,$logfile) || &error("Can't open $logfile",'NOLOCK');
+	#open(LOG,$logfile) || &error("Can't open $logfile",'NOLOCK');
+	sysopen(LOG,$logfile,O_RDONLY) || &error("Can't open $logfile",'NOLOCK');
 	@lines = <LOG>;
 	close(LOG);
 
@@ -1834,7 +1848,8 @@ if($fll){
 		sleep(1);
 	}
 }
-open (RL,"$rank_log") || &error("Can't open $rank_log");
+#open (RL,"$rank_log") || &error("Can't open $rank_log");
+sysopen(RL,"$rank_log",O_RDONLY) || &error("Can't open $rank_log");
 if($lockkey == 3){flock(RL,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
 @hd_rank = <RL>;
 close(RL);
@@ -1903,12 +1918,13 @@ if(@delete || $in{rw} || $in{mon_del}){
 if($fll){
 	&fll("$rklock","$rank_log",@hd_rank);
 }else{
-open(RL, "+< $rank_log") || &error("Can't open $rank_log");
-if($lockkey == 3){flock(RL,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
-truncate(RL, 0);
-seek(RL, 0, 0);
-print RL @hd_rank;
-close(RL);
+	#open(RL, "+< $rank_log") || &error("Can't open $rank_log");
+	sysopen(RL, "$rank_log",O_RDWR) || &error("Can't open $rank_log");
+	if($lockkey == 3){flock(RL,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
+	truncate(RL, 0);
+	seek(RL, 0, 0);
+	print RL @hd_rank;
+	close(RL);
 }
 }
 
@@ -2045,12 +2061,14 @@ sub usr_del {
 			sleep(1);
 		}
 	}
-	open(LOG,"$logfile") || &error("Can't open $logfile");
+	#open(LOG,"$logfile") || &error("Can't open $logfile");
+	sysopen(LOG,"$logfile",O_RDONLY) || &error("Can't open $logfile");
 	if($lockkey == 3){flock(LOG,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
 	@lines = <LOG>;
 	close(LOG);
 
-	open(RL,"$rank_log") || &error("Can't open $rank_log");
+	#open(RL,"$rank_log") || &error("Can't open $rank_log");
+	sysopen(RL,"$rank_log",O_RDONLY) || &error("Can't open $rank_log");
 
 	@rank = <RL>;
 	close(RL);
@@ -2142,12 +2160,13 @@ sub usr_del {
 	if($fll){
 		&fll("$lockfile","$logfile",@new);
 	}else{
-open(LOG, "+< $logfile") || &error("Can't open $logfile");
-if($lockkey == 3){flock(LOG,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
-truncate(LOG, 0);
-seek(LOG, 0, 0);
-print LOG @new;
-close(LOG);
+		#open(LOG, "+< $logfile") || &error("Can't open $logfile");
+		sysopen(LOG, "$logfile", O_RDWR ) || &error("Can't open $logfile");
+		if($lockkey == 3){flock(LOG,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
+		truncate(LOG, 0);
+		seek(LOG, 0, 0);
+		print LOG @new;
+		close(LOG);
 	}
 
 	# ロック解除
@@ -2179,7 +2198,8 @@ sub admin_del {
 			sleep(1);
 		}
 	}
-	open(LOG,"$logfile") || &error("Can't open $logfile");
+	#open(LOG,"$logfile") || &error("Can't open $logfile");
+	sysopen(LOG,"$logfile",O_RDONLY) || &error("Can't open $logfile");
 	if($lockkey == 3){flock(LOG,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
 	@lines = <LOG>;
 	close(LOG);
@@ -2248,12 +2268,13 @@ sub admin_del {
 	if($fll){
 		&fll("$lockfile","$logfile",@new);
 	}else{
-open(LOG, "+< $logfile") || &error("Can't open $logfile");
-if($lockkey == 3){flock(LOG,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
-truncate(LOG, 0);
-seek(LOG, 0, 0);
-print LOG @new;
-close(LOG);
+		#open(LOG, "+< $logfile") || &error("Can't open $logfile");
+		sysopen(LOG, "$logfile", O_RDWR ) || &error("Can't open $logfile");
+		if($lockkey == 3){flock(LOG,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
+		truncate(LOG, 0);
+		seek(LOG, 0, 0);
+		print LOG @new;
+		close(LOG);
 	}
 
 	## HTML作成
@@ -2333,14 +2354,15 @@ sub counter {
 		}
 	}
 	#open(NO,"$cntfile") || &error("Can't open $cntfile",'0');
-	open(NO,"$cntfile") || open(NO,"+>$cntfile");
+	sysopen(NO,"$cntfile",O_RDONLY | O_CREAT ) || error("Can't open $cntfile",'0');
 	if($lockkey == 3){flock(NO,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
 	$cnt = <NO>;
 	close(NO);
 	chop($cnt);
 
 	if(!$cnt && $cnt_ml){
-		open(NO,"$cntfile2") || &error("Can't open $cntfile2",'0');
+		#open(NO,"$cntfile2") || &error("Can't open $cntfile2",'0');
+		sysopen(NO,"$cntfile2",O_RDONLY) || &error("Can't open $cntfile2",'0');
 		$cnt = <NO>;
 		close(NO);
 		chop($cnt);
@@ -2356,21 +2378,23 @@ sub counter {
 		if($fll){
 			&fll("$cntlock","$cntfile","$cont");
 		}else{
-open(OUT, "+< $cntfile") || &error("Can't open $cntfile");
-if($lockkey == 3){flock(OUT,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
-truncate(OUT, 0);
-seek(OUT, 0, 0);
-print OUT $cont;
-close(OUT);
+			#open(OUT, "+< $cntfile") || &error("Can't open $cntfile");
+			sysopen(OUT, "$cntfile", O_RDWR ) || &error("Can't open $cntfile");
+			if($lockkey == 3){flock(OUT,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
+			truncate(OUT, 0);
+			seek(OUT, 0, 0);
+			print OUT $cont;
+			close(OUT);
 		}
 
 		if($cnt_ml){
-open(OUT, "+< $cntfile2") || &error("Can't open $cntfile2");
-if($lockkey == 3){flock(OUT,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
-truncate(OUT, 0);
-seek(OUT, 0, 0);
-print OUT $cont;
-close(OUT);
+			#open(OUT, "+< $cntfile2") || &error("Can't open $cntfile2");
+			sysopen(OUT, "$cntfile2" , O_RDWR ) || &error("Can't open $cntfile2");
+			if($lockkey == 3){flock(OUT,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
+			truncate(OUT, 0);
+			seek(OUT, 0, 0);
+			print OUT $cont;
+			close(OUT);
 		}
 
 	}
@@ -2406,7 +2430,8 @@ sub lock3 {
 	foreach (1 .. 7) {
 		if (-e $cntlock) { sleep(1); }
 		else {
-			open(LOCK,">$cntlock");
+			#open(LOCK,">$cntlock");
+			sysopen(LOCK,"$cntlock", O_WRONLY | O_TRUNC | O_CREAT );
 			close(LOCK);
 			$cnt_flag = 1;
 			last;
@@ -2743,7 +2768,8 @@ sub pastlog {
 	$new_flag = 0;
 
 	# 過去NOを開く
-	open(NO,"$nofile") || &error("Can't open $nofile");
+	#open(NO,"$nofile") || &error("Can't open $nofile");
+	sysopen(NO,"$nofile",O_RDONLY) || &error("Can't open $nofile");
 	$count = <NO>;
 	close(NO);
 
@@ -2756,7 +2782,8 @@ sub pastlog {
 
 	# 過去ログを開く
 	if ($new_flag == 0) {
-		open (IN,"$pastfile") || &error("Can't open $pastfile");
+		#open (IN,"$pastfile") || &error("Can't open $pastfile");
+		sysopen (IN,"$pastfile",O_RDONLY) || &error("Can't open $pastfile");
 		@past = <IN>;
 		close(IN);
 	}
@@ -2838,7 +2865,8 @@ HTML
 	push (@news,"<!--OWARI-->\n</body></html>$kbn\n");
 
 	# 過去ログを更新
-	open(OUT,">$pastfile") || &error("Can't write $pastfile");
+	#open(OUT,">$pastfile") || &error("Can't write $pastfile");
+	sysopen(OUT,"$pastfile", O_WRONLY | O_TRUNC | O_CREAT ) || &error("Can't write $pastfile");
 	print OUT @news;
 	close(OUT);
 
@@ -2850,7 +2878,8 @@ sub next_log {
 	$count++;
 
 	# カウントファイル更新
-	open(NO,">$nofile") || &error("Can't write $nofile");
+	#open(NO,">$nofile") || &error("Can't write $nofile");
+	sysopen(NO,"$nofile",O_WRONLY|O_TRUNC | O_CREAT ) || &error("Can't write $nofile");
 	print NO "$count";
 	close(NO);
 
@@ -2874,7 +2903,8 @@ sub new_log {
 	$past[4] = "</body></html>$kbn\n";
 
 	# 新規過去ログファイルを生成更新
-	open(OUT,">$pastfile") || &error("Can't write $pastfile");
+	#open(OUT,">$pastfile") || &error("Can't write $pastfile");
+	sysopen(OUT,"$pastfile",O_WRONLY | O_TRUNC | O_CREAT) || &error("Can't write $pastfile");
 	print OUT @past;
 	close(OUT);
 
@@ -2888,7 +2918,8 @@ sub rest {
 		&error("パスワードが違います",'NOLOCK');
 	}
 
-	open(LOG,$logfile) || &error("Can't open $logfile");
+	#open(LOG,$logfile) || &error("Can't open $logfile");
+	sysopen(LOG,$logfile,O_RDONLY) || &error("Can't open $logfile");
 	@lines = <LOG>;
 	close(LOG);
 
@@ -3059,11 +3090,13 @@ sub usr_rest {
 	if ($in{'del'} eq "") { &error("ラジオボタンの選択がありません。"); }
 
 	# ログを読み込む
-	open(LOG,"$logfile") || &error("Can't open $logfile");
+	#open(LOG,"$logfile") || &error("Can't open $logfile");
+	sysopen(LOG,"$logfile",O_RDONLY) || &error("Can't open $logfile");
 	@lines = <LOG>;
 	close(LOG);
 
-	open(RL,"$rank_log") || &error("Can't open $rank_log");
+	#open(RL,"$rank_log") || &error("Can't open $rank_log");
+	sysopen(RL,"$rank_log",O_RDONLY) || &error("Can't open $rank_log");
 	@rank = <RL>;
 	close(RL);
 
@@ -3302,7 +3335,8 @@ sub usr_rest2{
 			sleep(1);
 		}
 	}
-	open(LOG,"$logfile") || &error("Can't open $logfile");
+	#open(LOG,"$logfile") || &error("Can't open $logfile");
+	sysopen(LOG,"$logfile",O_RDONLY) || &error("Can't open $logfile");
 	if($lockkey == 3){flock(LOG,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
 	@lines = <LOG>;
 	close(LOG);
@@ -3313,7 +3347,8 @@ sub usr_rest2{
 			sleep(1);
 		}
 	}
-	open(RL,"$rank_log") || &error("Can't open $rank_log");
+	#open(RL,"$rank_log") || &error("Can't open $rank_log");
+	sysopen(RL,"$rank_log",O_RDONLY) || &error("Can't open $rank_log");
 	if($lockkey == 3){flock(RL,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
 	@rank = <RL>;
 	close(RL);
@@ -3495,7 +3530,8 @@ sub usr_rest2{
 	if($tg_mc){$comment = &tg_en("$comment");}
 	if($vote){
 		unless(-e "$vt_dir$num\.vt"){
-			open(VT,">$vt_dir$num\.vt") || &error("Can't open $vt_dir$num\.vt");
+			#open(VT,">$vt_dir$num\.vt") || &error("Can't open $vt_dir$num\.vt");
+			sysopen(VT,"$vt_dir$num\.vt" , O_WRONLY | O_TRUNC | O_CREAT) || &error("Can't open $vt_dir$num\.vt");
 			close(VT);
 			chmod(oct($vt_pm),"$vt_dir$num\.vt");
 		}
@@ -3532,24 +3568,26 @@ sub usr_rest2{
 	if($fll){
 		&fll("$rklock","$rank_log",@new_rank);
 	}else{
-open(RL, "+< $rank_log") || &error("Can't open $rank_log");
-if($lockkey == 3){flock(RL,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
-truncate(RL, 0);
-seek(RL, 0, 0);
-print RL @new_rank;
-close(RL);
+		#open(RL, "+< $rank_log") || &error("Can't open $rank_log");
+		sysopen(RL, "$rank_log" , O_RDWR ) || &error("Can't open $rank_log");
+		if($lockkey == 3){flock(RL,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
+		truncate(RL, 0);
+		seek(RL, 0, 0);
+		print RL @new_rank;
+		close(RL);
 	}
 
 	## ログを更新 ##
 	if($fll){
 		&fll("$lockfile","$logfile",@lines);
 	}else{
-open(LOG, "+< $logfile") || &error("Can't open $logfile");
-if($lockkey == 3){flock(LOG,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
-truncate(LOG, 0);
-seek(LOG, 0, 0);
-print LOG @lines;
-close(LOG);
+		#open(LOG, "+< $logfile") || &error("Can't open $logfile");
+		sysopen(LOG, "$logfile" , O_RDWR ) || &error("Can't open $logfile");
+		if($lockkey == 3){flock(LOG,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
+		truncate(LOG, 0);
+		seek(LOG, 0, 0);
+		print LOG @lines;
+		close(LOG);
 	}
 
 	## HTML作成
@@ -3577,7 +3615,8 @@ if($in{rest_sel}){
 			sleep(1);
 		}
 	}
-	open(RL,"$rank_log") || &error("Can't open $rank_log");
+	#open(RL,"$rank_log") || &error("Can't open $rank_log");
+	sysopen(RL,"$rank_log",O_RDONLY) || &error("Can't open $rank_log");
 	if($lockkey == 3){flock(RL,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
 	@rank = <RL>;
 	close(RL);
@@ -3624,13 +3663,13 @@ if(!$usr_ck){&error("対象となるお名前がありません");}
 if($fll){
 	&fll("$rklock","$rank_log",@rank);
 }else{
-
-open(RL, "+< $rank_log") || &error("Can't open $rank_log");
-if($lockkey == 3){flock(RL,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
-truncate(RL, 0);
-seek(RL, 0, 0);
-print RL @rank;
-close(RL);
+	#open(RL, "+< $rank_log") || &error("Can't open $rank_log");
+	sysopen(RL, "$rank_log" , O_RDWR ) || &error("Can't open $rank_log");
+	if($lockkey == 3){flock(RL,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
+	truncate(RL, 0);
+	seek(RL, 0, 0);
+	print RL @rank;
+	close(RL);
 }
 
 &get_cookie;
@@ -3719,7 +3758,8 @@ _HTML_
     $nsalt = $saltset[$wk % 64] . $saltset[$now % 64];
     $pwd = crypt($in{'password'}, $nsalt);
 
-    if ( !open(DB,">$passfile") ) { &error(0,__LINE__,__FILE__); }
+    #if ( !open(DB,">$passfile") ) { &error(0,__LINE__,__FILE__); }
+    sysopen(DB,"$passfile" ,O_WRONLY | O_TRUNC | O_CREAT ) || &error(0,__LINE__,__FILE__);
     print DB "crypt_password:$pwd\n";
     close(DB);
     print "<FONT COLOR=blue SIZE=+3>管理者パスワードが設定\されました。<BR><A HREF='$script'>[ＮＥＸＴ]</A>をクリックして下さい。</FONT><P>再度変更する場合は下記フォームで再入力しなおして下さい。<P><br>従来の萌え板のログを引き継ぐ方はまずは管理画面のランクログ変換をしてください<br>新規で使うかたはこのままで大丈夫です\n";
@@ -4207,7 +4247,8 @@ sub UpFile {
 	$up_err_msg="画像のアップロードに失敗しました";
 	}
 
-	open(OUT,"> $ImgFile") || &error("$up_err_msg","lock");
+	#open(OUT,"> $ImgFile") || &error("$up_err_msg","lock");
+	sysopen(OUT,"$ImgFile" , O_WRONLY | O_TRUNC | O_CREAT ) || &error("$up_err_msg","lock");
 	binmode(OUT);
 	binmode(STDOUT);
 	print OUT $upfile;
@@ -4232,14 +4273,16 @@ elsif($in{'bk_save'}){
 @bk_up_lines=("$date\n<date>\n");
 
 foreach(@bk_up){
-open(BKUP,$_);
-@bk_lines=<BKUP>;
-close(BKUP);
-push(@bk_lines,"<$_>\n");
-push(@bk_up_lines,@bk_lines);
+	#open(BKUP,$_);
+	sysopen(BKUP,$_,O_RDONLY);
+	@bk_lines=<BKUP>;
+	close(BKUP);
+	push(@bk_lines,"<$_>\n");
+	push(@bk_up_lines,@bk_lines);
 }
 
-open(BKUP,">$bk_dat");
+#open(BKUP,">$bk_dat");
+sysopen(BKUP,"$bk_dat",O_WRONLY | O_TRUNC | O_CREAT);
 print BKUP @bk_up_lines;
 close(BKUP);
 
@@ -4259,7 +4302,8 @@ if(!$redi){
 exit;
 }
 
-open(BKUP,"$bk_dat");
+#open(BKUP,"$bk_dat");
+sysopen(BKUP,"$bk_dat",O_RDONLY);
 $bk_date=<BKUP>;
 close(BKUP);
 
@@ -4313,15 +4357,17 @@ exit;
 }
 # ログ修復
 sub recv{
-open(BKUP,"$bk_dat");
-@bkup=<BKUP>;
+	#open(BKUP,"$bk_dat");
+	sysopen(BKUP,"$bk_dat",O_RDONLY);
+	@bkup=<BKUP>;
 
-splice(@bkup,0,2);
-$num=0;
+	splice(@bkup,0,2);
+	$num=0;
 
 	foreach $bkp(@bkup){
 		if($bkp eq "<$bk_up[$num]>\n"){
-		open(BKUP,">$bk_up[$num]");
+		#open(BKUP,">$bk_up[$num]");
+		sysopen(BKUP,"$bk_up[$num]",O_WRONLY | O_TRUNC | O_CREAT );
 		print BKUP @b_lines;
 		close(BKUP);
 		@b_lines=();
@@ -4380,7 +4426,7 @@ sub dt_sort{
 sub rank{
 
 #open (RL,"$rank_log") || &error("Can't open $rank_log");
-open (RL,"$rank_log") || open (RL,"+>$rank_log");
+sysopen (RL,"$rank_log",O_RDONLY | O_CREAT) || &error("Can't open $rank_log");
 @hd_rank = <RL>;
 close(RL);
 
@@ -4682,7 +4728,8 @@ if(!@nums && !$in{ml_ad}){&error("チェックBOXにチェックが入ってい�
 
 if(@nums){
 
-open (LOG,"$logfile");
+#open (LOG,"$logfile");
+sysopen(LOG,"$logfile",O_RDONLY);
 if($lockkey == 3){flock(LOG,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
 @log = <LOG>;
 close(LOG);
@@ -4832,7 +4879,8 @@ exit;
 sub mail_form{
 $max_dat=int($cgi_lib'maxdata/1024);
 
-open(LOG,"$logfile") || &error("Can't open $logfile",'NOLOCK');
+#open(LOG,"$logfile") || &error("Can't open $logfile",'NOLOCK');
+sysopen(LOG,"$logfile",O_RDONLY) || &error("Can't open $logfile",'NOLOCK');
 @log = <LOG>;
 close(LOG);
 shift(@log);
@@ -5173,7 +5221,8 @@ sub tg_en{
 	if($_[0] =~ /\/([^\/:]+):([\w\d]*\.\w{3})\//){
 
 		if(!$op_ico){
-			open(IN,"$icofile") || &error("Can't open $icofile",'NOLOCK');
+			#open(IN,"$icofile") || &error("Can't open $icofile",'NOLOCK');
+			sysopen(IN,"$icofile",O_RDONLY) || &error("Can't open $icofile",'NOLOCK');
 			@icons = <IN>;
 			close(IN);
 			$op_ico = 1;
@@ -5213,7 +5262,8 @@ sub tg_en{
 	if($_[0] =~ /\/([\w\d]*\.\w{3})\//){
 
 		if(!$op_ico){
-			open(IN,"$icofile") || &error("Can't open $icofile",'NOLOCK');
+			#open(IN,"$icofile") || &error("Can't open $icofile",'NOLOCK');
+			sysopen(IN,"$icofile",O_RDONLY) || &error("Can't open $icofile",'NOLOCK');
 			@icons = <IN>;
 			close(IN);
 			$op_ico = 1;
@@ -5426,7 +5476,8 @@ if($fll){
 		sleep(1);
 	}
 }
-open(VT,"$vt_dir$in{vt}\.vt");
+#open(VT,"$vt_dir$in{vt}\.vt");
+sysopen(VT,"$vt_dir$in{vt}\.vt",O_RDONLY);
 if($lockkey == 3){flock(VT,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
 @vt = <VT>;
 close(VT);
@@ -5453,12 +5504,13 @@ $addr = $ENV{'REMOTE_ADDR'};
 	if($fll){
 		&fll("$vtlock","$vt_dir$in{vt}\.vt",@vt);
 	}else{
-open(VT, "+< $vt_dir$in{vt}\.vt") || &error("Can't open $vt_dir$in{vt}\.vt");
-if($lockkey == 3){flock(VT,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
-truncate(VT, 0);
-seek(VT, 0, 0);
-print VT @vt;
-close(VT);
+		#open(VT, "+< $vt_dir$in{vt}\.vt") || &error("Can't open $vt_dir$in{vt}\.vt");
+		sysopen(VT, "$vt_dir$in{vt}\.vt" , O_RDWR ) || &error("Can't open $vt_dir$in{vt}\.vt");
+		if($lockkey == 3){flock(VT,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
+		truncate(VT, 0);
+		seek(VT, 0, 0);
+		print VT @vt;
+		close(VT);
 	}
 }
 
@@ -5503,7 +5555,8 @@ sub fll{
 	}
 	$tmp_1 = "$$\.tmp";
 
-	open(TMP,">$tmp_1") || &error("TMPファイル書きこみ失敗ヽ(´ー｀)ノ");
+	#open(TMP,">$tmp_1") || &error("TMPファイル書きこみ失敗ヽ(´ー｀)ノ");
+	sysopen(TMP,"$tmp_1",O_WRONLY | O_TRUNC | O_CREAT ) || &error("TMPファイル書きこみ失敗ヽ(´ー｀)ノ");
 	print TMP @_;
 	close(TMP);
 
@@ -5546,14 +5599,16 @@ if (crypt($in{'pass'}, substr($password, $salt, 2) ) ne $password) {
 	&error("パスワードが違います",'NOLOCK');
 }
 
-if (!open(DATA,"$rank_log")) {	return ;	}
+#if (!open(DATA,"$rank_log")) {	return ;	}
+if (!sysopen(DATA,"$rank_log",O_RDONLY)) {	return ;	}
 @LOG = <DATA>;	close(DATA);
 foreach ( @LOG )	{
 	chop $_ ;
 	($name,$all,$cg,$bgm,$res,$pass,$la,$rest,$mcr) = split(/<>/,$_);
 	push(@new,"$name<>$all<>$cg<>$bgm<>0<>$res<>$pass<>$la<>$rest<>$mcr<>\n");
 }
-if ( !(open(OUT,">$rank_log")))	{	return;	}
+#if ( !(open(OUT,">$rank_log")))	{	return;	}
+if ( !(sysopen(OUT,"$rank_log",O_WRONLY | O_TRUNC | O_CREAT )))	{	return;	}
 print OUT @new;	close(OUT);
 
 &header;

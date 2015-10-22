@@ -1,5 +1,8 @@
 #!/usr/bin/perl
 
+#for sysopen()
+use Fcntl;
+
 # jcode.plが同一ディレクトリにある場合
 #require './jcode.pl';
 #use Jcode;
@@ -23,7 +26,8 @@ $num=0;
 if($date){
 $siori = length $date;
 if($siori eq '30'){ $date = substr($date,0,-6) ;}
-open(SUM,"$sum_up_log");
+#open(SUM,"$sum_up_log");
+sysopen(SUM,"$sum_up_log",O_RDONLY);
 @lines=<SUM>;
 close(SUM);
 chop(@lines);
@@ -35,7 +39,8 @@ if ($date eq $up_date){$up_count = $up_count+1;$up{$date}="$up_name<>$up_url<>$u
 $newlines[$num]="$up_date<>$up_name<>$up_url<>$up_count<>$person<>$limit<>$ango<>\n";
 $num=$num+1;
 }
-open(NEWSUM,">$sum_up_log");
+#open(NEWSUM,">$sum_up_log");
+sysopen(NEWSUM,"$sum_up_log",O_WRONLY | O_TRUNC | O_CREAT );
 foreach(@newlines){
 print NEWSUM "$_";
 }
@@ -56,7 +61,8 @@ else {print "<BR><BR><BR><p align=center><B><font color = blue>$date、$up_date�
 
 }elsif($mode eq 'num'){
 
-open(SUM,"$sum_up_log");
+#open(SUM,"$sum_up_log");
+sysopen(SUM,"$sum_up_log",O_RDONLY);
 @newlines=<SUM>;
 close(SUM);
 chop(@newlines);
@@ -86,7 +92,8 @@ print "</table><P><hr><P>\n";
 
 }elsif($mode eq 'get'){
 if(defined(@get_up)){
-open(SUM,"$sum_up_log");
+#open(SUM,"$sum_up_log");
+sysopen(SUM,"$sum_up_log",O_RDONLY);
 @lines=<SUM>;
 close(SUM);
 
@@ -99,7 +106,8 @@ close(SUM);
 	}
 
 @newlines = reverse(@r_lines);
-open(NEWSUM,">$sum_up_log");
+#open(NEWSUM,">$sum_up_log");
+sysopen(NEWSUM,"$sum_up_log", O_WRONLY | O_TRUNC | O_CREAT );
 
 	foreach(@newlines){
 		print NEWSUM "$_";
@@ -130,7 +138,8 @@ print "<BR><BR><P align = center><font color = red><B>チェックボタンが�
 }elsif($mode eq 'usr_del'){
 
 if(defined($u_pass_check)){
-	open(SUM,"$sum_up_log");
+	#open(SUM,"$sum_up_log");
+	sysopen(SUM,"$sum_up_log",O_RDONLY);
 	@lines=<SUM>;
 	close(SUM);
 	@r_lines = reverse(@lines);
@@ -141,7 +150,8 @@ if(defined($u_pass_check)){
 	}
 
 if(defined($usr_del) && $check eq "yes"){
-	open(SUM,"$sum_up_log");
+	#open(SUM,"$sum_up_log");
+	sysopen(SUM,"$sum_up_log",O_RDONLY);
 	@lines=<SUM>;
 	close(SUM);
 	@r_lines = reverse(@lines);
@@ -152,7 +162,8 @@ if(defined($usr_del) && $check eq "yes"){
 		}
 	$num=0;
 	@newlines = reverse(@new_del_up);
-	open(NEWSUM,">$sum_up_log");
+	#open(NEWSUM,">$sum_up_log");
+	sysopen(NEWSUM,"$sum_up_log",O_WRONLY | O_TRUNC | O_CREAT );
 		foreach(@newlines){
 			print NEWSUM "$_";
 		}
@@ -165,7 +176,8 @@ elsif(defined($usr_del) && $check ne "yes"){
 	print "<BR><BR><BR><p align=center><font color = red size =+2>passが違います</font></p><P><hr><P>\n";
 &footer;
 }else{
-open(SUM,"$sum_up_log");
+#open(SUM,"$sum_up_log");
+sysopen(SUM,"$sum_up_log",O_RDONLY);
 @newlines=<SUM>;
 close(SUM);
 chop(@newlines);
@@ -177,7 +189,8 @@ chop(@newlines);
 }elsif($mode eq 'master_del'){
 
 if(defined(@del_up) && $m_pass_check eq $master_pass){
-	open(SUM,"$sum_up_log");
+	#open(SUM,"$sum_up_log");
+	sysopen(SUM,"$sum_up_log",O_RDONLY);
 	@lines=<SUM>;
 	close(SUM);
 	@r_lines = reverse(@lines);
@@ -188,7 +201,8 @@ if(defined(@del_up) && $m_pass_check eq $master_pass){
 		}
 	$num=0;
 	@newlines = reverse(@new_del_up);
-	open(NEWSUM,">$sum_up_log");
+	#open(NEWSUM,">$sum_up_log");
+	sysopen(NEWSUM,"$sum_up_log",O_WRONLY | O_TRUNC | O_CREAT);
 		foreach(@newlines){
 			print NEWSUM "$_";
 		}
@@ -201,7 +215,8 @@ elsif(defined(@del_up) && $m_pass_check ne $master_pass){
 	print "<BR><BR><BR><p align=center><font color = red size =+2>passが違います</font></p><P><hr><P>\n";
 &footer;
 }else{
-open(SUM,"$sum_up_log");
+#open(SUM,"$sum_up_log");
+sysopen(SUM,"$sum_up_log",O_RDONLY);
 @newlines=<SUM>;
 close(SUM);
 chop(@newlines);
@@ -211,7 +226,8 @@ chop(@newlines);
 ## 新着順表示
 
 }else{
-open(SUM,"$sum_up_log");
+#open(SUM,"$sum_up_log");
+sysopen(SUM,"$sum_up_log",O_RDONLY);
 @newlines=<SUM>;
 close(SUM);
 chop(@newlines);

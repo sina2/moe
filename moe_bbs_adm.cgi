@@ -38,6 +38,7 @@ elsif ($FORM{"mode"} eq "editConfig")      {&pass;&editConfig;}
 # 管理メニューの表示 #
 &header;
 print qq(
+	[<a href=$script>掲示板に戻る</a>]
 	<form action="$SCRIPT" method="$method">
     <input type=hidden name=bg_img value="$bg_img">
 	<center><h4>$titleの管理</h4>

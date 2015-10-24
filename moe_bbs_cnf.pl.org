@@ -338,6 +338,9 @@ $hari_mode = '1';
 # BGM貼りモード (0=no 1=yes)
 $bgm_up = '1';
 
+# デフォルトでBGM再生する？ (0=no 1=yes)
+$bgm_play = '0';
+
 # Flash貼りモード (0=no 1=yes)
 $flash_mode = '1';
 

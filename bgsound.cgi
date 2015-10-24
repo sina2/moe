@@ -10,6 +10,7 @@ if($ENV{'QUERY_STRING'}){
 	($name, $value) = split(/=/,$ENV{'QUERY_STRING'});
 	$bgm = $value;
 }else{
+if($bgm_play){
 	#open(IN,"$logfile");
 	sysopen(IN,"$logfile",O_RDONLY);
 	@lines = <IN>;
@@ -35,6 +36,7 @@ if($ENV{'QUERY_STRING'}){
 		if($bgm){last;}
 	}
 }
+}
 
 
 if($ENV{'HTTP_USER_AGENT'} =~ /MSIE/){
@@ -45,18 +47,7 @@ if($ENV{'HTTP_USER_AGENT'} =~ /MSIE/){
 
 
 
-sub no_bgm{
 
-print "Content-type: text/html\n\n";
-print <<EOD;
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<HTML>
-<HEAD>
-<TITLE>NO_BGM</TITLE>
-</HEAD>
-<BODY>
-EOD
-}
 
 
 

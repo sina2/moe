@@ -2452,6 +2452,8 @@ sub mail_to {
     	#Jcode::convert(*name,'jis');
     	#Jcode::convert(*sub,'jis');
     	#Jcode::convert(*comment,'jis');
+	$mail_sub = Encode::encode('MIME-HEADER-ISO_2022_JP',$mail_sub);
+	$ver = Encode::encode('MIME-HEADER-ISO_2022_JP',$ver);
 
 	$comment =~ s/<br>/\n/g;
 	$comment =~ s/&lt;/</g;
@@ -2466,8 +2468,9 @@ sub mail_to {
 	print MAIL "From: $email\n";
 	print MAIL "Subject: $mail_sub\n";
 	print MAIL "MIME-Version: 1.0\n";
-	print MAIL "Content-type: text/plain; charset=ISO-2022-JP\n";
-	print MAIL "Content-Transfer-Encoding: 7bit\n";
+	#print MAIL "Content-type: text/plain; charset=ISO-2022-JP\n";
+	#print MAIL "Content-Transfer-Encoding: 7bit\n";
+	print MAIL "Content-type: text/plain; charset=utf-8\n";
 	print MAIL "X-Mailer: $ver\n\n";
 	print MAIL "--------------------------------------------------------\n";
 	print MAIL "TIME : $date\n";

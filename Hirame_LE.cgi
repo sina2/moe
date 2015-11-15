@@ -2602,7 +2602,8 @@ sub footer {
 KENT &amp; MakiMaki<br>-->
 
 $ver <a href=$script?mode=B style=text-decoration:none;color:black;>b</a></a>y えうのす ＆ R七瀬<BR>
-（正式名：被羅目板2001萌え萌えVer 〜了承♪ by 被羅目〜）<br><br><font size=2>Customized By <a href=http://powder-snow.milk.tc/ target=_blank>月読</a> Ver 6.0</font>
+（正式名：被羅目板2001萌え萌えVer 〜了承♪ by 被羅目〜）<br><font size=2>Customized By 月読 Ver 6.0</font>
+<br>Customized By <a href=https://github.com/sina2/moe/ target=_blank>しなしな</a>
 </small></center>
 _HTML_
 

@@ -8,4 +8,4 @@ perl:
  - "5.16"
 
 
-
+script: "perl ./moemoe.cgi"

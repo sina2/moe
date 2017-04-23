@@ -12,7 +12,6 @@ install: true
 script: "perl ./moemoe.cgi"
 
 notifications:
-  slack:
-    on_success: always
-    on_failure: always
+  slack: udonnet:chXGUc6MRNGkm2AgjhV1FvKG
+
 

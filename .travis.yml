@@ -10,3 +10,9 @@ perl:
 install: true
 
 script: "perl ./moemoe.cgi"
+
+notification:
+  slack:
+    on_success: always
+    on_failure: always
+

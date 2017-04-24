@@ -81,7 +81,12 @@ $crypted = crypt($FORM{'newAdminPass'},int(rand(90))+10);
 
 if (!$FORM{'newAdminPass'}) {$crypted = '';}
 #open(LOG,"$Settingfile") || die;
-sysopen(LOG,$Settingfile,O_RDONLY) || die;
+if ( -f "$Settingfile" ){
+	sysopen(LOG,$Settingfile,O_RDONLY) || die;
+}else{
+	sysopen(LOG,"./moe_bbs_cnf.pl.org",O_RDONLY) || die;
+}
+
 @lines = <LOG>;
 close(LOG);
 for ($i=0; $i<=$#lines; $i++) {
@@ -126,7 +131,6 @@ exit;
 sub changeConfig { # 設定の書き換え
 
 #open(LOG,"$Settingfile") || die;
-
 if ( -f "$Settingfile" ){
 	sysopen(LOG,$Settingfile,O_RDONLY) || die;
 }else{

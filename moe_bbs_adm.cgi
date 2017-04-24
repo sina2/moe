@@ -8,7 +8,13 @@ use Fcntl;
 #require "./jcode.pl";
 #use Jcode;
 
-require "$Settingfile";
+# 設定ファイル読み込み
+if ( -f "$Settingfile" ){
+	require $Settingfile;
+}else{
+	require './moe_bbs_cnf.pl.org';
+}
+
 require './cgi-lib.pl';
 
 $SCRIPT = './moe_bbs_adm.cgi';
@@ -120,7 +126,13 @@ exit;
 sub changeConfig { # 設定の書き換え
 
 #open(LOG,"$Settingfile") || die;
-sysopen(LOG,$Settingfile,O_RDONLY) || die;
+
+if ( -f "$Settingfile" ){
+	sysopen(LOG,$Settingfile,O_RDONLY) || die;
+}else{
+	sysopen(LOG,"./moe_bbs_cnf.pl.org",O_RDONLY) || die;
+}
+
 @lines = <LOG>;
 close(LOG);
 for ($i=0; $i<=$#lines; $i++) {
@@ -183,7 +195,11 @@ print qq(
 
 $system = 0;
 #open(LOG,"$Settingfile") || die;
-sysopen(LOG,$Settingfile,O_RDONLY) || die;
+if ( -f "$Settingfile" ){
+	sysopen(LOG,$Settingfile,O_RDONLY) || die;
+}else{
+	sysopen(LOG,"./moe_bbs_cnf.pl.org",O_RDONLY) || die;
+}
 
 foreach $logline (<LOG>) {
 	if ($logline eq "\n") {next;}

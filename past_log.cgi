@@ -4,7 +4,11 @@
 use Fcntl;
 
 # 設定ファイル読み込み
-require './moe_bbs_cnf.pl';
+if ( -f "./moe_bbs_cnf.pl" ){
+	require './moe_bbs_cnf.pl';
+}else{
+	require './moe_bbs_cnf.pl.org';
+}
 
 ## 設定完了
 

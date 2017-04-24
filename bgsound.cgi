@@ -4,7 +4,12 @@
 use Fcntl;
 
 # 設定ファイル読み込み
-require './moe_bbs_cnf.pl';
+if ( -f "./moe_bbs_cnf.pl" ){
+	require './moe_bbs_cnf.pl';
+}else{
+	require './moe_bbs_cnf.pl.org';
+}
+
 
 if($ENV{'QUERY_STRING'}){
 	($name, $value) = split(/=/,$ENV{'QUERY_STRING'});

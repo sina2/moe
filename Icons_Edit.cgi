@@ -3,7 +3,12 @@
 #for sysopen()
 use Fcntl;
 
-require './moe_bbs_cnf.pl';
+# 設定ファイル読み込み
+if ( -f "./moe_bbs_cnf.pl" ){
+	require './moe_bbs_cnf.pl';
+}else{
+	require './moe_bbs_cnf.pl.org';
+}
 
 require './cgi-lib.pl';
 $cgi_lib'maxdata = $ico_max * $ico_rv_num;

@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -T
 
 #for sysopen()
 use Fcntl;
@@ -44,7 +44,11 @@ if(!$add_ck){$rank{$name}=1;}
 }
 
 #open (LST,"$i_rank_log") || &error("Can't open $i_rank_log");
-sysopen(LST,"$i_rank_log",O_RDONLY | O_REAT) || &error("Can't open $i_rank_log");
+if ( -f "$i_rank_log" ){
+	sysopen(LST,"$i_rank_log",O_RDONLY | O_REAT) 
+}else{
+	sysopen(LST,"$i_rank_log", O_WRONLY |O_TRUNC | O_CREAT )
+}
 @ico_rank = <LST>;
 close(LST);
 
@@ -259,7 +263,7 @@ if($fll){
 if($in{'del_submit'}){
 	foreach(@del_img){
 	$del_img = "$icon_dir$_";
-	if( -e "$del_img"){unlink("$del_img");}
+#	if( -e "$del_img"){unlink("$del_img");}
 	}
 
 #open (LEN,">rw_ck.chk");
@@ -787,6 +791,7 @@ sub up_icon{
 	if ($f_type =~ /gif/i) { $tail=".gif"; }
 	if ($f_type =~ /jpeg/i) { $tail=".jpg"; }
 	if ($f_type =~ /x-png/i) { $tail=".png"; }
+	if ($f_type =~ /png/i) { $tail=".png"; }
 
 	if (!$tail && $macbin) {
 		if ($f_name =~ /.gif/i) { $tail=".gif"; }

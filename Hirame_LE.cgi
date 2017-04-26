@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -T
 
 # jcode.plが同一ディレクトリにある場合
 #require './jcode.pl';
@@ -998,7 +998,7 @@ sub regist {
 			#ログ互換
 			if($img =~ /\.$/){$img="$img"."bgm";}		
 			
-			if(-e "$img"){ unlink("$img"); }
+#			if(-e "$img"){ unlink("$img"); }
 			}
 
 			if($img =~ /cgm$/){
@@ -1008,11 +1008,11 @@ sub regist {
 			#ログ互換
 			if($bgm =~ /\.$/){$bgm="$img.bgm";}
 
-			if(-e "$pic"){ unlink("$pic"); }
-			if(-e "$bgm"){ unlink("$bgm"); }
+#			if(-e "$pic"){ unlink("$pic"); }
+#			if(-e "$bgm"){ unlink("$bgm"); }
 			}
 
-			elsif(($img) && (-e "$img")){ unlink("$img"); }
+#			elsif(($img) && (-e "$img")){ unlink("$img"); }
 			if ($pastkey == 0) { last; }
 			else {
 				if ($k eq "") { $kflag=1; push(@past_data,$line); }
@@ -2140,7 +2140,7 @@ sub usr_del {
 			    #ログ互換
 			    if($img =~ /\.$/){$img="$img"."bgm";}		
 
-			    if(-e "$img"){ unlink("$img"); }
+#			    if(-e "$img"){ unlink("$img"); }
 			}
 
 			if($img =~ /cgm$/){
@@ -2150,11 +2150,11 @@ sub usr_del {
 			    #ログ互換
 			    if($bgm =~ /\.$/){$bgm="$img.bgm";}
 
-			    if(-e "$pic"){ unlink("$pic"); }
-			    if(-e "$bgm"){ unlink("$bgm"); }
+#			    if(-e "$pic"){ unlink("$pic"); }
+#			    if(-e "$bgm"){ unlink("$bgm"); }
 			}
 
-			elsif(($img) && (-e "$img")){ unlink("$img"); }
+#			elsif(($img) && (-e "$img")){ unlink("$img"); }
 		}
 
 	# 親記事NOを付加
@@ -2237,7 +2237,7 @@ sub admin_del {
 			#ログ互換
 			if($img =~ /\.$/){$img="$img"."bgm";}		
 
-			if(-e "$img"){ unlink("$img"); }
+#			if(-e "$img"){ unlink("$img"); }
 			}
 
 			if($img =~ /cgm$/){
@@ -2247,11 +2247,11 @@ sub admin_del {
 			#ログ互換
 			if($bgm =~ /\.$/){$bgm="$img.bgm";}
 
-			if(-e "$pic"){ unlink("$pic"); }
-			if(-e "$bgm"){ unlink("$bgm"); }
+#			if(-e "$pic"){ unlink("$pic"); }
+#			if(-e "$bgm"){ unlink("$bgm"); }
 			}
 
-			elsif(($img) && (-e "$img")){ unlink("$img"); }
+#F			elsif(($img) && (-e "$img")){ unlink("$img"); }
 
 				$dflag = 1;
 				$del_num = $num;
@@ -3505,8 +3505,8 @@ sub usr_rest2{
 	#ログ互換
 	if($bgm =~ /\.$/){$bgm="$t_dimg.bgm";}
 
-	if(!$in{'ch_img'} && (-e "$pic")){ unlink("$pic");$img_del=1; }
-	if(!$in{'ch_bgm'} && (-e "$bgm")){ unlink("$bgm");$bgm_del=1; }
+#	if(!$in{'ch_img'} && (-e "$pic")){ unlink("$pic");$img_del=1; }
+#	if(!$in{'ch_bgm'} && (-e "$bgm")){ unlink("$bgm");$bgm_del=1; }
 	if($img_del && $bgm_del){$dimg="";}
 	elsif($img_del){$dimg="$bgm"."bgm";}
 	elsif($bgm_del){$dimg=$pic;}
@@ -3515,7 +3515,7 @@ sub usr_rest2{
 
 	# 貼り画像削除
 	elsif(($dimg !~ /bgm$/) && !$in{'ch_img'} && ($dimg) && (-e "$dimg")){
-        unlink("$dimg");
+#       unlink("$dimg");
         $dimg="";
         $pixel = "";
     }
@@ -3673,7 +3673,7 @@ if($fll){
 }else{
 	#open(RL, "+< $rank_log") || &error("Can't open $rank_log");
 	sysopen(RL, "$rank_log" , O_RDWR ) || &error("Can't open $rank_log");
-	if($lockkey == 3){flock(RL,2) || &error("filelock 失ヽ(´ー｀)ノ敗");}
+	if($lockkey == 3){flock(RL,2) |unlink| &error("filelock 失ヽ(´ー｀)ノ敗");}
 	truncate(RL, 0);
 	seek(RL, 0, 0);
 	print RL @rank;
@@ -4205,6 +4205,7 @@ sub UpFile {
 	if ($tail =~ /gif/i) { $tail=".gif"; $flag=1; }
 	if ($tail =~ /jpeg/i) { $tail=".jpg"; $flag=1; }
 	if ($tail =~ /x-png/i) { $tail=".png"; $flag=1; }
+	if ($tail =~ /png/i) { $tail=".png"; $flag=1; }
 	if (!$flag) {
 		#if ($fname =~ /.gif/i) { $tail=".gif"; $flag=1; }
 		#if (($fname =~ /.jpg/i) || ($fname =~ /.jpeg/i)){ $tail=".jpg"; $flag=1; }

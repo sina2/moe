@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+#!/usr/bin/perl -T
 
 # BBSスクリプト名
 $bbs_script="./Hirame_LE.cgi";

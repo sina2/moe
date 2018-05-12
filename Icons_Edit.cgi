@@ -659,8 +659,8 @@ $bg_img = $in{'bg_img'};
 <!--
 $bdcss
 body,tr,td,th { font-size: $pt }
-a:link        { font-size: $pt; color:$link }
-a:visited     { font-size: $pt; color:$vlink }
+a:link        { color:$link }
+a:visited     { color:$vlink }
 a:active      { font-size: $pt; color:$alink }
 a:hover       { font-size: $pt; color:$alink }
 span          { font-size: $t_point }
@@ -700,7 +700,7 @@ sub footer {
 <center>$banner2<P><small>
 萌々ぼ〜ど2001 by えうのす ＆ R七瀬<BR>
 （正式名：被羅目板2001萌え萌えVer 〜了承♪ by 被羅目〜）<br><font size=2>Customized By 月読 Ver 6.0</font>
-<br>Customized By <a href=https://github.com/sina2/moe/ target=_blank>しなしな</a>
+<br>Customized By <a href="https://github.com/sina2/moe/" target=_blank>しなしな</a>
 </small></center>
 _HTML_
 

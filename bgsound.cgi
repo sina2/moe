@@ -58,6 +58,7 @@ if($ENV{'HTTP_USER_AGENT'} =~ /MSIE/){
 
 print "Content-type: text/html\n\n";
 print <<EOM;
+<!doctype html>
 <html>
 <head>
 <META HTTP-EQUIV="Content-type" CONTENT="text/html; charset=utf-8">
@@ -65,6 +66,5 @@ print <<EOM;
 <body>
 $bgm_ex
 </body></html>
-<noembed>
 EOM
 

@@ -322,6 +322,7 @@ $rcom =~ s/\r/<br>/g;
 	}
 
 $bgm_html = <<"EOM";
+<!doctype html>
 <html>
 <head><META HTTP-EQUIV="Content-type" CONTENT="text/html; charset=utf-8">
 <SCRIPT LANGUAGE="JavaScript">
@@ -337,8 +338,7 @@ function nnbgm(){
 </head>
 <body>
 <span id="bgm"><bgsound src=$bgm loop=infinite></span>
-</body></html>
-<noembed>
+</body></html>f
 EOM
 	$bgm_write = "$html_dir"."bgm\.html";
 	open(BGM,">$bgm_write");

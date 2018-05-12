@@ -404,6 +404,7 @@ $bg_img = $in{'bg_img'};
 
 	print "Content-type: text/html\n\n";
 	print <<"EOM";
+<!doctype html>
 <html>
 <head>
 <META HTTP-EQUIV="Content-type" CONTENT="text/html; charset=utf-8">

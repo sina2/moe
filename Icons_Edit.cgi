@@ -651,6 +651,7 @@ $bg_img = $in{'bg_img'};
 
 	print "Content-type: text/html\n\n";
 	print <<"EOM";
+<!doctype html>
 <html>
 <head>
 <META HTTP-EQUIV="Content-type" CONTENT="text/html; charset=utf-8">
@@ -709,7 +710,7 @@ _HTML_
 	for( $t=0; $t<32; $t++ ){ 
 	$id3 .= $st_table[ int( @string_table * rand() ) ]; }
 print "</body></html>";
-if($nobanner){print "<noembed>";}
+if($nobanner){print "";}
 }
 
 ## --- パスワード暗号処理

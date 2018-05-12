@@ -1,0 +1,7 @@
+Options	All
+AddType  application/x-httpd-cgi .cgi
+
+<FILES .htaccess>
+	order allow,deny
+	deny from all
+</FILES>

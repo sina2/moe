@@ -2530,6 +2530,7 @@ sub header {
 	}
 
 	$header = <<"EOM";
+<!doctype html>
 <html>
 <head>
 <META HTTP-EQUIV="Content-type" CONTENT="text/html; charset=utf-8">
@@ -2621,7 +2622,7 @@ $footer .= "<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 }
 
 $footer .= "</body></html>";
-if($nobanner){$footer .= "<noembed>";}
+if($nobanner){$footer .= "";}
 if(!$html_write){print "$footer";}
 }
 
@@ -2754,7 +2755,7 @@ $ict_num_ex = "$ict_num_ex <a href=\"$script?i_pg=self&mode=image&bg_img=$in{bg_
 	print "$ict_num_ex<br><br>\n";
 	print "<FORM><INPUT TYPE=\"button\" VALUE=\"  CLOSE  \" onClick=\"top.close();\"></FORM></center>\n";
 	print "</body></html>\n";
-	if($nobanner){print "<noembed>";}
+	if($nobanner){print "";}
 	exit;
 }
 
@@ -2869,7 +2870,7 @@ HTML
 		push (@news,$line);
 		if ($line =~ /<!--HAJIME-->/i) { push (@news,@htmls); }
 	}
-	if($nobanner){$kbn = "<noembed>";}
+	if($nobanner){$kbn = "";}
 	push (@news,"<!--OWARI-->\n</body></html>$kbn\n");
 
 	# 過去ログを更新
@@ -2903,8 +2904,8 @@ sub new_log {
 
 	if ($backgif) { $bgkey = "background=\"$backgif\" bgcolor=$bgcolor"; }
 	else { $bgkey = "bgcolor=$bgcolor"; }
-	if($nobanner){$kbn = "<noembed>";}
-	$past[0] = "<html><head><META HTTP-EQUIV=\"Content-type\" CONTENT=\"text/html\; charset=utf-8\"><title>過去ログ</title></head>\n";
+	if($nobanner){$kbn = "";}
+	$past[0] = "<!doctype html><html><head><META HTTP-EQUIV=\"Content-type\" CONTENT=\"text/html\; charset=utf-8\"><title>過去ログ</title></head>\n";
 	$past[1] = "<body $bgkey text=$text link=$link vlink=$vlink alink=$alink><hr size=1>\n";
 	$past[2] = "<\!--HAJIME-->\n";
 	$past[3] = "<\!--OWARI-->\n";
@@ -3740,6 +3741,7 @@ sub password {
   print <<"_HTML_";
 Content-type: text/html
 
+<!doctype html>
 <HTML>
 <HEAD>
 <META HTTP-EQUIV="Content-type" CONTENT="text/html; charset=utf-8">
@@ -5598,7 +5600,7 @@ BODY{
 
 EOM
 
-print "<img src=$fwall></body></html><noembed>";
+print "<img src=$fwall></body></html>";
 exit;
 }
 

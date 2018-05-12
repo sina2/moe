@@ -86,7 +86,7 @@ HTML
 	}
 
 	print "</body></html>\n";
-	if($nobanner){print "<noembed>";}
+	if($nobanner){print "";}
 	exit;
 }
 
@@ -98,6 +98,7 @@ sub frame {
 
 	print "Content-type: text/html\n\n";
 	print <<"HTML";
+<!doctype html>
 <html>
 <head><META HTTP-EQUIV="Content-type" CONTENT="text/html; charset=utf-8"><title>過去ログ</title></head>
 <frameset rows="110\,*" FRAMEBORDER=no BORDER=0>
@@ -110,7 +111,7 @@ sub frame {
 </html>
 HTML
 
-	if($nobanner){print "<noembed>";}
+	if($nobanner){print "";}
 	exit;
 }
 
@@ -134,7 +135,7 @@ HTML
 
 	print "</center><hr size=2>\n";
 	print "</body></html>\n";
-	if($nobanner){print "<noembed>";}
+	if($nobanner){print "";}
 	exit;
 }
 
@@ -168,7 +169,7 @@ sub nainai {
 	print "<center>見つかりませんでした。<hr>\n";
 	print "<b>$word</b></center>\n";
 	print "</body></html>\n";
-	if($nobanner){print "<noembed>";}
+	if($nobanner){print "";}
 	exit;
 }
 
@@ -198,7 +199,7 @@ sub find_html {
 <hr>
 </body></html>
 HTML
-	if($nobanner){print "<noembed>";}
+	if($nobanner){print "";}
 	exit;
 }
 
@@ -211,6 +212,7 @@ sub header {
 
 	print "Content-type: text/html\n\n";
 	print <<"EOM";
+<!doctype html>
 <html>
 <head>
 <META HTTP-EQUIV="Content-type" CONTENT="text/html; charset=utf-8">
@@ -257,6 +259,6 @@ sub error {
 	print "<P><font color=#dd0000><B>$_[0]</B></font>\n";
 	print "<P><hr width=75%></center>\n";
 	print "</body></html>\n";
-	if($nobanner){print "<noembed>";}
+	if($nobanner){print "";}
 	exit;
 }

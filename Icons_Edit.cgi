@@ -27,7 +27,11 @@ elsif($in{'rank'}){&rank;}
 sub rank{
 
 #open (LST,"$icofile") || &error("Can't open $icofile");
-sysopen(LST,"$icofile",O_RDONLY) || &error("Can't open $icofile");
+if ( -f "$icofile" ){
+	sysopen(LST,"$icofile",O_RDONLY | O_REAT) 
+}else{
+	sysopen(LST,"$icofile", O_WRONLY |O_TRUNC | O_CREAT )
+}
 @Icons = <LST>;
 close(LST);
 $num = @Icons ;
@@ -81,13 +85,13 @@ if($icon_dir2){$icon_dir = $icon_dir2;}
 $s_num = keys(%rank);
 &header;
 print <<EOM;
-<a name=top>[<a href=$script?cnt=no>掲示板に戻る</a>]</a>
+[<a href=\"$script?cnt=no\">掲示板に戻る</a>]
 <br>
 <center><font color=\"$t_color\" size=6 face=\"$t_face\"><b><SPAN>アイコンらんきんぐ〜</SPAN></b></font><br><br>
 <a name=add><br></a>
 <table width=\"80%\"><tr><td>
 <font color=blue size=+1 face=\"$t_face\">現在の萌え総数 $num らんきんぐ参加人数 $s_num人</font><br><br>
-<table width=\"100%\"><tr><td><b>※このランキングはアイコン追加ランキングです（ｗ</b><td align=right><a href=#ico>アイコン</a>　<a href=#top>TOPに戻る</a></td></tr></table></td></tr></table>
+<table width=\"100%\"><tr><td><b>※このランキングはアイコン追加ランキングです（ｗ</b></td><td align=right><a href=#ico>アイコン</a>　<a href=#top>TOPに戻る</a></td></tr></table></td></tr></table>
 <table width="80%" border=1 cellspacing=0>
 <tr><th>順位</th><th>お名前</th><th nowrap>萌え度</th><th>萌えぱ〜せんて〜じ</th></tr>
 EOM
@@ -143,17 +147,18 @@ foreach(0 .. $st_top){
 	$next_num=0;$ex_num = $rk;
 	}
 
-$nex_jg = $ico_rank{$st_tp};
-$per = int((($ico_rank{$st_tp}/$all_num)*100)+0.5);
-if(!$per){$per=1;}
-if($ico_rank{$st_tp}){
-$gif_w =int($ico_rank{$st_tp}*$g_width);if(!$gif_w){$gif_w=1;}
-print"<tr><td>$ex_num</td><td><b>$ico_name{$st_tp}</b></td><td><b>$ico_rank{$st_tp}</b></td><td nowrap><img src=$icon_dir\graph.gif height=\"12\" width=\"$gif_w\"> $per\%</td></tr>";
-}
+	$nex_jg = $ico_rank{$st_tp};
+	if($all_num==0){$all_num=1};
+	$per = int((($ico_rank{$st_tp}/$all_num)*100)+0.5);
+	if(!$per){$per=1;}
+	if($ico_rank{$st_tp}){
+	$gif_w =int($ico_rank{$st_tp}*$g_width);if(!$gif_w){$gif_w=1;}
+	print"<tr><td>$ex_num</td><td><b>$ico_name{$st_tp}</b></td><td><b>$ico_rank{$st_tp}</b></td><td nowrap><img src=$icon_dir\graph.gif height=\"12\" width=\"$gif_w\"> $per\%</td></tr>";
+	}
 }
 
 print "</table>";
-print "</cener>";
+print "</center>";
 
 &footer;
 exit;
@@ -366,7 +371,7 @@ print LEN $all_len;
 close(LEN);
 
 &header;
-print "[<a href=$script?cnt=no>掲示板に戻る</a>]";
+print "[<a href=\"$script?cnt=no\">掲示板に戻る</a>]";
 print"<br><center><h3><font color=blue>以下のアイコン登録が完了しました</font></h3>";
 print "<table border=1 cellspacing=0><tr>";
 
@@ -420,13 +425,13 @@ print <<"EOM";
 <input type=hidden name=bg_img value="$bg_img">
 <table>
 <tr><td>お名前</td><td><input type=text name=name size=12 value=\"$c_name\"></td></tr>
-<tr><td>削除キー</td><td><input type=password name=pwd size=12 maxlength=8 value=$c_pwd></td></tr>
+<tr><td>削除キー</td><td><input type=password name=pwd size=12 maxlength=8 value=\"$c_pwd\"></td></tr>
 </table>
 
 <br>
 <center><input type=submit value=OK></center>
 
-</td></tr></table>
+</td></tr></table></center></form>
 EOM
 &footer;
 exit;
@@ -482,7 +487,7 @@ else{ $st_num=0; $ed_num=0;} ###
 
 &header;
 print <<"EOM";
-[<a href=$script?cnt=no>掲示板に戻る</a>]
+[<a href=\"$script?cnt=no\">掲示板に戻る</a>]
 <center><font color=\"$t_color\" size=6 face=\"$t_face\"><b><SPAN>$titleアイコンこ〜な〜</SPAN></b></font></center><br>
 <center>
 <table border=1 cellspacing=0 bordercolor=black bgcolor=white><tr><td>
@@ -697,7 +702,7 @@ EOM
 ## --- HTMLのフッター
 sub footer {
 	print <<"_HTML_";
-<center>$banner2<P><small>
+<center>$banner2<small>
 萌々ぼ〜ど2001 by えうのす ＆ R七瀬<BR>
 （正式名：被羅目板2001萌え萌えVer 〜了承♪ by 被羅目〜）<br><font size=2>Customized By 月読 Ver 6.0</font>
 <br>Customized By <a href="https://github.com/sina2/moe/" target=_blank>しなしな</a>

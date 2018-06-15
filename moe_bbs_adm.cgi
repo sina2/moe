@@ -12,7 +12,7 @@ use Fcntl;
 if ( -f "$Settingfile" ){
 	require $Settingfile;
 }else{
-	require './moe_bbs_cnf.pl.org';
+	require './moe_bbs_cnf.pl.md';
 }
 
 require './cgi-lib.pl';
@@ -84,7 +84,7 @@ if (!$FORM{'newAdminPass'}) {$crypted = '';}
 if ( -f "$Settingfile" ){
 	sysopen(LOG,$Settingfile,O_RDONLY) || die;
 }else{
-	sysopen(LOG,"./moe_bbs_cnf.pl.org",O_RDONLY) || die;
+	sysopen(LOG,"./moe_bbs_cnf.pl.md",O_RDONLY) || die;
 }
 
 @lines = <LOG>;
@@ -134,7 +134,7 @@ sub changeConfig { # 設定の書き換え
 if ( -f "$Settingfile" ){
 	sysopen(LOG,$Settingfile,O_RDONLY) || die;
 }else{
-	sysopen(LOG,"./moe_bbs_cnf.pl.org",O_RDONLY) || die;
+	sysopen(LOG,"./moe_bbs_cnf.pl.md",O_RDONLY) || die;
 }
 
 @lines = <LOG>;
@@ -202,7 +202,7 @@ $system = 0;
 if ( -f "$Settingfile" ){
 	sysopen(LOG,$Settingfile,O_RDONLY) || die;
 }else{
-	sysopen(LOG,"./moe_bbs_cnf.pl.org",O_RDONLY) || die;
+	sysopen(LOG,"./moe_bbs_cnf.pl.md",O_RDONLY) || die;
 }
 
 foreach $logline (<LOG>) {

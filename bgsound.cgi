@@ -7,7 +7,7 @@ use Fcntl;
 if ( -f "./moe_bbs_cnf.pl" ){
 	require './moe_bbs_cnf.pl';
 }else{
-	require './moe_bbs_cnf.pl.org';
+	require './moe_bbs_cnf.pl.md';
 }
 
 

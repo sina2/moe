@@ -140,14 +140,14 @@ if ( -f "$Settingfile" ){
 @lines = <LOG>;
 close(LOG);
 for ($i=0; $i<=$#lines; $i++) {
-	if ($lines[$i] =~ /^#\(SYSTEM\)/) { last; }
+	if ($lines[$i] =~ /^####\sSYSTEM/) { last; }
 
 	if ($_DATA_ == 1 && $lines[$i] !~ "_DATA_") {$lines[$i] = ''; next;}
 	$_DATA_ = 0;
 
 	if ($lines[$i] =~ /^\$(\w+).*=.*<<"_DATA_";/) {
-	$lines[$i] = "\$$1 = <<\"_DATA_\";\n$FORM{$1}\n";
-	$_DATA_ = 1;
+		$lines[$i] = "\$$1 = <<\"_DATA_\";\n$FORM{$1}\n";
+		$_DATA_ = 1;
 	}
 	elsif ($lines[$i] =~ /^\$(\w+).*=.*'.*'/) {
 		$FORM{$1} =~ s/'/&#39;/g;
@@ -209,19 +209,19 @@ foreach $logline (<LOG>) {
 	if ($logline eq "\n") {next;}
 	if ($_DATA_ == 1 && $logline !~ "_DATA_") {next;}
 	$_DATA_ = 0;
-	if ($logline =~ "#【(.+)】") {
+	if ($logline =~ "^# (.+)") {
 	if ($opentable == 1) {$opentable = 0;print "</table></div><br><br>";}
 	print "■ $1<B></B><p>\n";
 	print "<div align='center'>\n";
 	print "<table border=1 width=97% cellpadding=2 cellspacing=0 bordercolorlight='#999999' bordercolordark='#999999'>\n";
 	$opentable = 1;
-	} elsif ($logline eq "#(SYSTEM)\n") {
+	} elsif ($logline =~ /^####\sSYSTEM/) {
 		$system = 1;
-	} elsif ($logline =~ /^#/) {
-		if ($logline =~ /(###)/) { next; }
-		if ($logline =~ /(^##|^#)(.+)/) {$menu = $2;}
+	} elsif ($logline =~ /^##/) {
+		if ($logline =~ /(####)/) { next; }
+		if ($logline =~ /(^###|^##)(.+)/) {$menu = $2;}
 		print "<tr><td>";
-		if ($logline !~ /##/) { print "<font color='#ff0000'>*</font>"; }
+		if ($logline !~ /###/) { print "<font color='#ff0000'>*</font>"; }
 		print "<font size=2>$menu</font></td>";
 	} elsif (!$system) {
 	if ($logline =~ /<<"_DATA_";/) {

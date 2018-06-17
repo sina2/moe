@@ -21,7 +21,7 @@ $backgif = '';
 $fwall = './Icon/loading.gif';
 
 # 背景画像設定(スタイルシート):配置パターン,固定,開始位置
-##スタイルシートを使用しないで背景画像を表示したい場合は0に
+## スタイルシートを使用しないで背景画像を表示したい場合は0に
 $css = '0';
 
 ## repeat,repeat-x,repeat-y,no-repeat で指定
@@ -143,19 +143,79 @@ $tagkey = '1';
 $tg_mc = '1';
 
 ## マクロの種類（font以外）<br>マクロ名。大文字のほうが無難。
-@tgs1 = ('B','I','U','S','H','Q','T','R','C','CN','RT','M','M2','MR','MR2','MA','MA2','BL');
+@tgs1 = ('B
+','I
+','U
+','S
+','H
+','Q
+','T
+','R
+','C
+','CN
+','RT
+','M
+','M2
+','MR
+','MR2
+','MA
+','MA2
+','BL');
 ## 上記マクロに対応するタグ
-@tgs2 = ('b','i','u','s','span style="cursor:hand"','span style=";cursor:help"','textarea rows=1 cols=25 name=moe_vt','input type=radio name=moe_vt value=moe_vt','input type=checkbox name=moe_vt value=moe_vt','div align=center','div align=right','marquee','marquee scrollamount=12','marquee direction=right','marquee direction=right scrollamount=12','marquee behavior=alternate','marquee behavior=alternate scrollamount=12','blink');
+@tgs2 = ('b
+','i
+','u
+','s
+','span style="cursor:hand"
+','span style=";cursor:help"
+','textarea rows=1 cols=25 name=moe_vt
+','input type=radio name=moe_vt value=moe_vt
+','input type=checkbox name=moe_vt value=moe_vt
+','div align=center
+','div align=right
+','marquee
+','marquee scrollamount=12
+','marquee direction=right
+','marquee direction=right scrollamount=12
+','marquee behavior=alternate
+','marquee behavior=alternate scrollamount=12
+','blink');
 
 ## 短縮フォント名
-@sfont1 = ('PO','ME','W1','W2');
+@sfont1 = ('PO
+','ME
+','W1
+','W2');
 ## 上記対応実体
-@sfont2 = ('HGP創英角ﾎﾟｯﾌﾟ体','MS P明朝','webdings','wingdings');
+@sfont2 = ('HGP創英角ﾎﾟｯﾌﾟ体
+','MS P明朝
+','webdings
+','wingdings');
 
 ## イメージ用マクロの種類
-@itgs1 = ('DS','SD','GR','GG','GB','BL','XR','GY','IN','FH','FV');
+@itgs1 = ('DS
+','SD
+','GR
+','GG
+','GB
+','BL
+','XR
+','GY
+','IN
+','FH
+','FV');
 ## 上記対応実体
-@itgs2 = ('style="filter:dropshadow()"','style="filter:shadow()"','style="filter:glow(color=red)"','style="filter:glow(color=green)"','style="filter:glow(color=blue)"','style="filter:blur()"','style="filter:xray()"','style="filter:gray()"','style="filter:invert()"','style="filter:fliph()"','style="filter:flipv()"');
+@itgs2 = ('style="filter:dropshadow()"
+','style="filter:shadow()"
+','style="filter:glow(color=red)"
+','style="filter:glow(color=green)"
+','style="filter:glow(color=blue)"
+','style="filter:blur()"
+','style="filter:xray()"
+','style="filter:gray()"
+','style="filter:invert()"
+','style="filter:fliph()"
+','style="filter:flipv()"');
 
 ## 投票ボタン（投票システムを使いたくない場合は未記入で $vt_btn = '';）
 $vt_btn = '<input type=submit value="投票・見る">';
@@ -182,7 +242,7 @@ $homepage_back = '';
 ## 掲示板のTOPのURL (通常は $script か ./page1.html で)
 $homepage = "$script";
 
-## フレーム定義HTML 新規投稿時の飛び先にも使用<br> フレームもCGIにしたければmoemoe.cgiを使用する
+## フレーム定義HTML 新規投稿時の飛び先にも使用
 $top_page = 'moemoe.html';
 
 ## ログファイルを指定<br> フルパスで指定する場合は / から記述
@@ -234,7 +294,40 @@ $mail_me = '0';
 $base_url = '';
 
 ## 文字色の設定。
-@COLORS = ('800000','DF0000','008040','0000FF','C100C1','FF80C0','FF8040','000080','e9e2a2','9feabb','f6a091','c150d5','637ac0','b1b36e','917da4','d44d6f','8a9e83','ffffff','9400D3','0000CD','FF0099','FF00FF','DF0000','20B2AA','6495ED','FF80C0','FF9900','000000','B22222','008B8B','FFD700','6A5ACD','D2691E','c1642E');
+@COLORS = ('800000
+','DF0000
+','008040
+','0000FF
+','C100C1
+','FF80C0
+','FF8040
+','000080
+','e9e2a2
+','9feabb
+','f6a091
+','c150d5
+','637ac0
+','b1b36e
+','917da4
+','d44d6f
+','8a9e83
+','ffffff
+','9400D3
+','0000CD
+','FF0099
+','FF00FF
+','DF0000
+','20B2AA
+','6495ED
+','FF80C0
+','FF9900
+','000000
+','B22222
+','008B8B
+','FFD700
+','6A5ACD
+','D2691E
+','c1642E');
 
 ## 投稿フォーム改行形式 (soft=手動 hard=強制)
 $wrap = 'soft';
@@ -277,7 +370,12 @@ $bk_dat = './moelog/moe_bk_up.zip';
 $bk_pm = '0606';
 
 ## バックアップしたいログ
-@bk_up = ('./moelog/count.dat','./moelog/icon.lst','./moelog/rank.log','./moelog/icon_rank.log','./moelog/moemoe.log','./moelog/sum_up.log');
+@bk_up = ('./moelog/count.dat
+','./moelog/icon.lst
+','./moelog/rank.log
+','./moelog/icon_rank.log
+','./moelog/moemoe.log
+','./moelog/sum_up.log');
 
 # おぷしょんこ〜な〜
 
@@ -338,7 +436,7 @@ $hari_mode = '1';
 ## BGM貼りモード (0=no 1=yes)
 $bgm_up = '1';
 
-## デフォルトでBGM再生する？ (0=no 1=yes)
+## デフォルトでBGM再生する(0=no 1=yes)
 $bgm_play = '0';
 
 ## Flash貼りモード (0=no 1=yes)

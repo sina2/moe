@@ -11,7 +11,6 @@ install: true
 
 script: "./bgsound.cgi && ./Hirame_LE.cgi"
 
-notifications:
-  slack: udonnet:chXGUc6MRNGkm2AgjhV1FvKG
+
 
 

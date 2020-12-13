@@ -29,5 +29,4 @@ jobs:
         with:
           perl-version: ${{ matrix.perl }}
       - run: perl -V
-      - run: cpanm --installdeps .
-      - run: prove -lv t
+      - run: ./bgsound.cgi && ./Hirame_LE.cgi && ./Icons_Edit.cgi && ./moe_bbs_adm.cgi

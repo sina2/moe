@@ -1,8 +1,8 @@
 FROM centos:7
 
 RUN set -x && \
-    dnf install -y git && \
-    dnf install -y httpd && \
+    yum install -y git && \
+    yum install -y httpd && \
     cd /var/www/cgi-bin && \
     git clone https://github.com/sina2/moe.git && \
     cd moe && \

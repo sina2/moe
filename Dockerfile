@@ -9,5 +9,6 @@ RUN set -x && \
     chmod 755 *.cgi && \
     chmod 777 Icon img moelog moelog/pass.cgi
 
-EXPOSE 80
+RUN sed -i 's/80/8080/' /etc/httpd/conf/httpd.conf
+
 CMD [ "/usr/sbin/httpd" ,"-D", "FOREGROUND" ]
